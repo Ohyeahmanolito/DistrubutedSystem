@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -43,13 +44,10 @@ public class ClientController implements Serializable {
     public void init() {
         files = new HashSet<>();
         servers = new LinkedHashSet<>();
-
         /*Initialize arbitrary list of file servers to connect
          for (int i = 0; i < Protocol.SERVER_NUMBER; i++) {
          servers.add(new ServerInfo("localhost", 1099 + i));
-         }*/
-
-        /*Receive file list from servers and just upload in web browser
+         }*/ /*Receive file list from servers and just upload in web browser
          servers.forEach(server -> {
          try (Socket connection = server.getSocket();
          OutputStream out = connection.getOutputStream()) {
@@ -66,6 +64,8 @@ public class ClientController implements Serializable {
          Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
          }
          });*/
+
+
     }
 
     /**
@@ -162,6 +162,7 @@ public class ClientController implements Serializable {
         Map<String, String> parameter = ec.getRequestParameterMap();
         ServerInfo server = new ServerInfo(parameter.get("ip"), Integer.parseInt(parameter.get("port")));
         servers.add(server);
+        System.out.println("server is add: " + server);
         return server.toString();
     }
 

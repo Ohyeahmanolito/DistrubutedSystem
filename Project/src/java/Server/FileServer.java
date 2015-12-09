@@ -93,9 +93,9 @@ public class FileServer implements Runnable {
                             }
                             break;
                         case Protocol.UPLOAD:
-                            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                            try (DataInputStream br = new DataInputStream(is)) {
                                 String fileName = br.readLine();
-                                long size = Files.copy(is, directory.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+                                long size = Files.copy(br, directory.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
                                 System.out.println("File " + fileName + " was uploaded to " + addressPort + " with the size of " + size);
                             } catch (IOException e) {
                                 System.out.println(e);
@@ -223,32 +223,32 @@ public class FileServer implements Runnable {
                     es.execute(server);
                 }
             } else if (input.equalsIgnoreCase("exit")) {
-                server.stop();
+                break;
             }
         }
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            String input = br.readLine();
-            int port = Integer.parseInt(input);
-            FileServer server = new FileServer(port);
-            es.execute(server);
-            System.out.print("Press enter to close: ");
-            input = br.readLine();
-            System.out.print("Press enter to open: ");
-            input = br.readLine();
-            System.out.print("Press 'exit' to open: ");
-            input = br.readLine();
-
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    server.stop();
-                } catch (IOException ex) {
-                    Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                es.shutdown();
-            }));
-        } catch (IOException ex) {
-            Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+//            String input = br.readLine();
+//            int port = Integer.parseInt(input);
+//            FileServer server = new FileServer(port);
+//            es.execute(server);
+//            System.out.print("Press enter to close: ");
+//            input = br.readLine();
+//            System.out.print("Press enter to open: ");
+//            input = br.readLine();
+//            System.out.print("Press 'exit' to open: ");
+//            input = br.readLine();
+//
+//            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//                try {
+//                    server.stop();
+//                } catch (IOException ex) {
+//                    Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                es.shutdown();
+//            }));
+//        } catch (IOException ex) {
+//            Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 }
